@@ -5,30 +5,40 @@ It monitors a list of computers in a local network, shows their online/offline s
 
 ## Features
 
-- Windows 10+ only
-- Native WinAPI tray application, no external GUI frameworks
-- Starts directly to the system tray
-- Monitors computers from `netmon.ini`
+- Windows 10 and later
+- Native WinAPI application written in plain C for GCC/MinGW
+- No external GUI frameworks or third-party runtime dependencies
+- Starts hidden in the system tray
+- Reads monitored hosts and behavior flags from `netmon.ini`
 - Per-host monitoring interval
-- Right-click or left-click the tray icon to open a menu with all configured computers
-- Each computer has a submenu with:
-  - a non-clickable IP line
+- Right-click the tray icon to open the action menu
+- Left-click the tray icon to show or hide the server list window
+- Each configured computer appears as its own submenu in the tray menu
+- Each computer submenu can contain:
+  - a disabled line with the host IP address
   - `On`
   - `Off`
   - `Reboot`
   - `RDP`
-- Availability of `On`, `Off`, `Reboot`, and `RDP` is controlled per host from the INI file
+- Availability of `On`, `Off`, `Reboot`, and `RDP` is controlled per host in the INI file
 - `On` asks for confirmation and sends a Wake-on-LAN magic packet
-- `Off` asks for confirmation, connects to `\\HOST\IPC$` with the configured credentials and runs `shutdown.exe /m \\HOST /s /t 0 /f`
+- `Off` asks for confirmation and attempts a remote shutdown using the configured credentials
+- `Reboot` asks for confirmation and attempts a remote reboot using the configured credentials
 - `RDP` starts `mstsc.exe /v:HOST`
-- Every manual command shows a result dialog and a tray balloon: success or error
-- Tray balloon notifications for online/offline state changes
-- Optional always-visible compact topmost window with all configured computers
-- In that window, online computers are black, offline computers are silver, names are sorted by IP, and a divider is drawn whenever the 3rd IPv4 octet changes
-- The online list window auto-sizes to its content, uses a yellow sticky-note style, is semi-transparent, has a thin black border, and can be dragged by its body
-- Right-click on the online list window also opens the same context menu as the tray icon
-- The online list window position is remembered in `netmon.cache.ini`
-- Very small project footprint: a single C source file plus config/build files
+- Every manual action reports the result: success or a detailed error
+- Tray balloon notifications for host online/offline state changes
+- Optional always-visible topmost server list window
+- The server list window shows all configured hosts:
+  - online hosts in black
+  - offline hosts in silver
+  - names only, without IP addresses
+  - sorted by IP address
+  - separated when the 3rd IPv4 octet changes
+- The server list window is compact, semi-transparent, yellow, and draggable by its body
+- The server list window uses a thin 1 px black border with small content padding
+- Right-click on the server list window opens the same menu as the tray icon
+- The server list window position is saved in `netmon.cache.ini`
+- Small project footprint: a single C source file plus configuration and build files
 
 ## Build
 
